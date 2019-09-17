@@ -121,10 +121,13 @@ void Server::exportSequence(const std::int32_t fd) {
     Sequence seq{};
     if(!m_storage.get(fd,seq))
         return;
-
+ 
     bool generate{true};
-    for(std::uint8_t i=0; i<constants::numberSubSequence; ++i)
-        generate = generate && seq[i].flag;
+    for(std::uint8_t i=0; i<constants::numberSubSequence; ++i) {
+        generate = true && seq[i].flag;
+        if(generate)
+            break;
+    }
 
     if(!generate)
         return;
@@ -278,12 +281,8 @@ std::string Server::generateSequence(Sequence& seq) {
 
         }
 
-    }
-    std::string::size_type pos {buffer.rfind(' ')};
-    if(pos == std::string::npos)
-        return std::string{};
-
-    buffer[pos] = '\n';
+    }    
+    buffer[buffer.size()-1] = '\n';
 
     return buffer;
 }
