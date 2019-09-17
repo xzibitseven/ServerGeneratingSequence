@@ -13,6 +13,9 @@ namespace sgs {
     class Storage {
         public:
             explicit Storage() = default;
+            Storage(const Storage& ) = delete;
+            Storage& operator=(const Storage& ) = delete;
+        
             bool set(const std::int32_t fd, const Sequence& seq) {
                 std::lock_guard<SharedMutex> lock(m_mtx);
                 m_storage[fd] = {seq};
