@@ -1,4 +1,4 @@
-# g++ with support C++11 (tested on g++6.3)
+# g++ with support C++14 or higher (tested on g++6.3 and g++8.3)
 CC = g++
 CFLAGS = -Wall -c -std=c++14
 LIBS = -pthread -latomic
