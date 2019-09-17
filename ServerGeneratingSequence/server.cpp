@@ -20,7 +20,9 @@ Server::Server(const std::uint16_t& port):
 
     m_addr.sin_family = AF_INET;
     m_addr.sin_port = htons(port);
-    m_addr.sin_addr.s_addr = inet_addr("127.0.0.7");
+        
+    std::string ipAdress{"127.0.0.7"};
+    m_addr.sin_addr.s_addr = inet_addr(ipAdress.c_str());    
 
     if(bind(m_listener, reinterpret_cast<struct sockaddr *>(&m_addr), sizeof(m_addr)) < 0)
         throw std::runtime_error("Error bind\n");
@@ -30,6 +32,8 @@ Server::Server(const std::uint16_t& port):
 
     if(fcntl(m_listener, F_SETFL, O_NONBLOCK) < 0)
         std::cerr << "Error fcntl\n";
+        
+    std::cout << "listening " << ipAdress << ":" << port << '\n';    
 }
 
 Server::~Server() {
@@ -76,8 +80,10 @@ void Server::run() {
                             else {
                                 if(fcntl(sock, F_SETFL, O_NONBLOCK) < 0)
                                     std::cerr << "Error fcntl\n";
-
-                                 FD_SET(sock, &m_fdsRead);
+                                {
+                                    std::lock_guard<SharedMutex> lock(m_mtxFdsRead);
+                                    FD_SET(sock, &m_fdsRead);
+                                }
 
                                 if(sock > fdMax)
                                     fdMax = sock;
