@@ -5,7 +5,7 @@ CXX           = g++
 CFLAGS        = -pipe -O2 -Wall -W -fPIC
 CXXFLAGS      = -pipe -O2 -std=c++14 -Wall -W -fPIC
 
-LIBS = -pthread -latomic
+LIBS          = -pthread -latomic
 LINK          = g++
 LFLAGS        = -Wl,-O1
 INCPATH       = -I../ServerGeneratingSequence
@@ -23,7 +23,7 @@ OBJECTS       = main.o \
 		command.o \
 		exportseqcommand.o
 
-TARGET = server
+TARGET        = server
 
 server:  $(OBJECTS)  
 	$(CXX) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
