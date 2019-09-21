@@ -21,8 +21,8 @@ Server::Server(const std::uint16_t& port):
     m_addr.sin_family = AF_INET;
     m_addr.sin_port = htons(port);
         
-    std::string ipAdress{"127.0.0.7"};
-    m_addr.sin_addr.s_addr = inet_addr(ipAdress.c_str());    
+    std::string ipAddress{"127.0.0.7"};
+    m_addr.sin_addr.s_addr = inet_addr(ipAddress.c_str());    
 
     if(bind(m_listener, reinterpret_cast<struct sockaddr *>(&m_addr), sizeof(m_addr)) < 0)
         throw std::runtime_error("Error bind\n");
@@ -33,7 +33,7 @@ Server::Server(const std::uint16_t& port):
     if(fcntl(m_listener, F_SETFL, O_NONBLOCK) < 0)
         std::cerr << "Error fcntl\n";
         
-    std::cout << "listening " << ipAdress << ":" << port << '\n';    
+    std::cout << "listening " << ipAddress << ":" << port << '\n';    
 }
 
 Server::~Server() {
@@ -113,7 +113,6 @@ void Server::setSequence(const Sequence& seq, const std::uint64_t& idx, const st
         m_storage.set(fd,sequence);
     }
 
-    return;
 }
 
 void Server::exportSequence(const std::int32_t fd) {
@@ -138,7 +137,6 @@ void Server::exportSequence(const std::int32_t fd) {
     m_storage.set(fd,seq);
     m_threadPool.submit(std::bind(&Server::handlerClient, this, fd, EventHandler::Write));
 
-    return;
 }
 
 void Server::handlerClient(const std::int32_t fd, const EventHandler& event) {
@@ -162,7 +160,7 @@ void Server::handlerClient(const std::int32_t fd, const EventHandler& event) {
             break;
         }
     }
-    return;
+
 }
 
 bool Server::onRead(const std::int32_t fd) {
